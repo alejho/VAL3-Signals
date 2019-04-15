@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="exeWzone">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_tTool" type="tool" xsi:type="element" />
+      <Parameter name="x_pPoint" type="point" xsi:type="element" />
+      <Parameter name="x_fFrame" type="frame" xsi:type="element" />
+      <Parameter name="x_Dx" type="num" xsi:type="element" />
+      <Parameter name="x_Dy" type="num" xsi:type="element" />
+      <Parameter name="x_Dz" type="num" xsi:type="element" />
+      <Parameter name="x_dOut" type="dio" xsi:type="element" />
+    </Parameters>
+    <Locals>
+      <Local name="l_bXok" type="bool" xsi:type="array" size="1" />
+      <Local name="l_bYok" type="bool" xsi:type="array" size="1" />
+      <Local name="l_bZok" type="bool" xsi:type="array" size="1" />
+      <Local name="l_pHere" type="point" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+  while true
+    l_pHere=here(x_tTool,x_fFrame)
+    l_bXok=l_pHere.trsf.x>x_pPoint.trsf.x-x_Dx/2 and l_pHere.trsf.x<x_pPoint.trsf.x+x_Dx/2
+    l_bYok=l_pHere.trsf.y>x_pPoint.trsf.y-x_Dy/2 and l_pHere.trsf.y<x_pPoint.trsf.y+x_Dy/2
+    l_bZok=l_pHere.trsf.z>x_pPoint.trsf.z-x_Dz/2 and l_pHere.trsf.z<x_pPoint.trsf.z+x_Dz/2
+    if l_bXok and l_bYok and l_bZok
+      x_dOut=false
+    else
+      x_dOut=true
+    endIf
+    delay(0)
+  endWhile
+end]]></Code>
+  </Program>
+</Programs>

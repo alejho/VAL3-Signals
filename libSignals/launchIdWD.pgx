@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="launchIdWD">
+    <Code><![CDATA[begin
+  
+  //if not existing launch moveid watchdog task
+  if taskStatus("moveIdWatchdog")!=1
+    taskKill("moveIdWatchdog")
+    wait(taskStatus("moveIdWatchdog")==-1)
+    taskCreate "moveIdWatchdog",10,moveIdWatchdog()
+    wait(taskStatus("moveIdWatchdog")==1)
+  endIf
+  
+end]]></Code>
+  </Program>
+</Programs>

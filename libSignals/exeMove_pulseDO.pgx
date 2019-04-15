@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="exeMove_pulseDO">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_nAdvMoveIndex" type="num" xsi:type="element" />
+      <Parameter name="x_nMoveId" type="num" xsi:type="element" />
+      <Parameter name="x_pPoint" type="point" xsi:type="element" />
+      <Parameter name="x_tTool" type="tool" xsi:type="element" />
+      <Parameter name="x_nDistance" type="num" xsi:type="element" />
+      <Parameter name="x_nPulseLength" type="num" xsi:type="element" />
+      <Parameter name="x_dDio" type="dio" xsi:type="element" />
+    </Parameters>
+    <Locals>
+      <Local name="l_givenId" type="num" xsi:type="array" size="1" />
+      <Local name="l_nDistance" type="num" xsi:type="array" size="1" />
+      <Local name="l_nMoveId" type="num" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+
+  //I want to see the tool entering the zone
+  //so at first I must be out
+  wait(distance(position(here(x_tTool,world),world),position(x_pPoint,world))>=x_nDistance or roundDown(getMoveId())>roundDown(x_nMoveId))
+  //then I go inside
+  wait((distance(position(here(x_tTool,world),world),position(x_pPoint,world))<x_nDistance and roundDown(getMoveId())==roundDown(x_nMoveId)) or roundDown(getMoveId())>roundDown(x_nMoveId))
+
+  if distance(position(here(x_tTool,world),world),position(x_pPoint,world))<x_nDistance
+    //logMsg("libSignals/exeMove_PulseDO->success")  
+    call pulse(x_dDio,x_nPulseLength)
+  elseIf roundDown(getMoveId())>roundDown(x_nMoveId)
+    //the tool never passed close enough to x_pPoint 
+    logMsg("libSignals/exeMove_PulseDO->fail")
+  endIf
+  
+  call freeAdvMove(x_nAdvMoveIndex)
+
+end]]></Code>
+  </Program>
+</Programs>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://www.staubli.com/robotics/VAL3/Project/3" >
+  <Parameters version="s7.9.1" stackSize="5000" millimeterUnit="true" />
+  <Programs>
+    <Program file="SA.pgx" />
+    <Program file="SE.pgx" />
+    <Program file="advMovesEmpty.pgx" />
+    <Program file="avaAdvMoveIndex.pgx" />
+    <Program file="blink.pgx" />
+    <Program file="checkAdvMoves.pgx" />
+    <Program file="destroyAdvMoves.pgx" />
+    <Program file="exeBlink.pgx" />
+    <Program file="exeMove_pulseDO.pgx" />
+    <Program file="exeMove_setDO.pgx" />
+    <Program file="exePulse.pgx" />
+    <Program file="exeSA.pgx" />
+    <Program file="exeSE.pgx" />
+    <Program file="exeSearchL.pgx" />
+    <Program file="exeSzone.pgx" />
+    <Program file="exeWZone.pgx" />
+    <Program file="freeAdvMove.pgx" />
+    <Program file="killBlink.pgx" />
+    <Program file="launchIdWD.pgx" />
+    <Program file="lockAdvMove.pgx" />
+    <Program file="MoveIdWatchdog.pgx" />
+    <Program file="movej_pulseDO.pgx" />
+    <Program file="movej_setDO.pgx" />
+    <Program file="movel_pulseDO.pgx" />
+    <Program file="movel_setDO.pgx" />
+    <Program file="pulse.pgx" />
+    <Program file="sZone.pgx" />
+    <Program file="searchL.pgx" />
+    <Program file="wZone.pgx" />
+  </Programs>
+  <Database>
+    <Data file="libSignals.dtx" />
+  </Database>
+  <Libraries>
+  </Libraries>
+  <Types>
+  </Types>
+</Project>

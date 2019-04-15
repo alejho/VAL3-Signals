@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="SE" access="public">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_dInput" type="dio" xsi:type="element" />
+      <Parameter name="x_dOutput" type="dio" xsi:type="element" />
+      <Parameter name="x_nLength" type="num" xsi:type="element" />
+    </Parameters>
+    <Code><![CDATA[begin
+
+  //"set delay"
+  //set the x_dOutput only when x_dInput is true for a time greater than x_nLength
+  //note: x_dInput isn't necessarily an input
+
+  if taskStatus("SE_"+toString("",nSE_Count))==-1
+    taskCreate "SE_"+toString("",nSE_Count),10,exeSE(x_dInput,x_dOutput,x_nLength)
+    nSE_Count=nSE_Count+1
+    if nSE_Count>nMaxTask
+      nSE_Count=0
+    endIf
+  else
+    logMsg("libSignals/SE->can't create SE task")
+  endIf
+
+end]]></Code>
+  </Program>
+</Programs>

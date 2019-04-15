@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="advMovesEmpty">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_bRes" type="bool" xsi:type="element" use="reference" />
+    </Parameters>
+    <Locals>
+      <Local name="l_nIndex" type="num" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+  
+  //return true if the advanced moves stack is empty
+  x_bRes=true
+  for l_nIndex=0 to size(bAdvMoveBusy)-1
+    if bAdvMoveBusy[l_nIndex]
+      x_bRes=false
+      return
+    endIf
+  endFor
+  
+  
+end]]></Code>
+  </Program>
+</Programs>

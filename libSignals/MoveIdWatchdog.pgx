@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="moveIdWatchdog" access="public">
+    <Locals>
+      <Local name="l_bLoop" type="bool" xsi:type="array" size="1" />
+      <Local name="l_nCurrMoveId" type="num" xsi:type="array" size="1" />
+      <Local name="l_nIndex" type="num" xsi:type="array" size="1" />
+      <Local name="l_nLastMoveId" type="num" xsi:type="array" size="1" />
+      <Local name="l_sTemp" type="string" xsi:type="array" size="1" />
+      <Local name="l_bStackWasPop" type="bool" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+
+  //this program run as task can detect moveId alteration...sure there must be a better way to do it...
+  //note:
+  //      - it doesn't detect a setMoveId if it cause a moveId change < = 1
+  //      - is done this way and not on the mere difference beacuse for some reason, sometime the moveId seems having a +-1 discontinuity for a single cicle...
+  //        (see SRC-893)
+
+  l_nLastMoveId=getMoveId()
+  l_bLoop=true
+
+  while l_bLoop
+
+    l_nCurrMoveId=getMoveId()
+    
+    if (roundDown(l_nCurrMoveId)>roundDown(l_nLastMoveId)+1) or (roundDown(l_nCurrMoveId)<roundDown(l_nLastMoveId)-1) or (l_bStackWasPop and isEmpty())
+      //resetMotion or SetMoveId detected!
+      logMsg("libSignals/moveIdWatchdog->resetMotion or SetMoveId detected")
+      setMutex(bAdvMoves)
+      call destroyAdvMoves()
+      bAdvMoves=false
+    endIf
+
+    l_nLastMoveId=l_nCurrMoveId
+    //save if the movement stack was populated 
+    l_bStackWasPop=!isEmpty()
+    
+    //if possible kill the moveid watchdog task
+    l_bLoop=false
+    for l_nIndex=0 to size(bAdvMoveBusy)-1
+      l_bLoop=l_bLoop or bAdvMoveBusy[l_nIndex] 
+    endFor
+    
+    delay(0)
+  endWhile
+
+end]]></Code>
+  </Program>
+</Programs>

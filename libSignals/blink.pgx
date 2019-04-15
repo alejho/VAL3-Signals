@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="blink" access="public">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_sDioName" type="string" xsi:type="element" />
+      <Parameter name="x_nInterval" type="num" xsi:type="element" />
+      <Parameter name="x_dDio" type="dio" xsi:type="element" />
+    </Parameters>
+    <Code><![CDATA[begin
+
+  //blink the output x_dDio with period x_nInterval
+
+  if taskStatus("blink_"+x_sDioName)==-1
+    taskCreate "blink_"+x_sDioName,10,exeBlink(x_dDio,x_nInterval)
+    wait(taskStatus("blink_"+x_sDioName)==1)
+  else
+    //logMsg("libSignals/blink->can't create the blink task")
+  endIf
+
+
+end]]></Code>
+  </Program>
+</Programs>

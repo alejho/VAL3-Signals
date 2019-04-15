@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="checkAdvMoves">
+    <Locals>
+      <Local name="l_nIndex" type="num" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+  
+  //setMutex(bAdvMoves)
+  for l_nIndex=0 to size(bAdvMoveBusy)-1
+    if bAdvMoveBusy[l_nIndex] 
+      if taskStatus(sAdvMovePrefix+toString("",l_nIndex))==-1
+        bAdvMoveBusy[l_nIndex]=false
+      endIf
+    endIf  
+  endFor
+  //bAdvMoves=false
+  
+end]]></Code>
+  </Program>
+</Programs>

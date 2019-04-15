@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="searchL" access="public">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_pEndSearch" type="point" xsi:type="element" />
+      <Parameter name="x_tTool" type="tool" xsi:type="element" />
+      <Parameter name="x_mMdesc" type="mdesc" xsi:type="element" />
+      <Parameter name="x_fFrame" type="frame" xsi:type="element" use="reference" />
+      <Parameter name="x_dInput" type="dio" xsi:type="element" />
+      <Parameter name="x_pFound" type="point" xsi:type="element" use="reference" />
+    </Parameters>
+    <Locals>
+      <Local name="l_mMdesc" type="mdesc" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+
+  //execute a movel from x_pStartSearch to x_pEndSearch 
+  //if x_dInput switch to true during this movement the robot stops and the current position of x_tTool is written in x_pFound
+  //note: x_dInput isn't necessarily an input, the blend of the movement is set to off by default
+
+  bSearchLFail=false
+  bSearchLSuccess=false
+
+  if taskStatus("searchL")==-1
+    taskCreate "searchL",10,exeSearchL(x_dInput,x_tTool)
+  else
+    logMsg("libSignals/searchL->error creating the control task")
+  endIf
+
+  l_mMdesc=x_mMdesc
+  l_mMdesc.blend=off
+
+  movel(x_pEndSearch,x_tTool,l_mMdesc)
+  wait(distance(here(x_tTool,x_fFrame),x_pEndSearch)<nBlendOffToll or bSearchLSuccess)
+  if !bSearchLSuccess
+    bSearchLFail=true
+  else
+    x_pFound=here(x_tTool,x_fFrame)
+  endIf
+end]]></Code>
+  </Program>
+</Programs>

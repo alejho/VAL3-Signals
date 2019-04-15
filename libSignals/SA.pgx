@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="SA" access="public">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_dInput" type="dio" xsi:type="element" />
+      <Parameter name="x_dOutput" type="dio" xsi:type="element" />
+      <Parameter name="x_nLength" type="num" xsi:type="element" />
+    </Parameters>
+    <Code><![CDATA[begin
+
+  //"reset delay"
+  //reset the x_dOutput only when x_dInput is false for a time greater than x_nLength
+  //note: x_dInput isn't necessarily an input
+
+  if taskStatus("SA_"+toString("",nSA_Count))==-1
+    taskCreate "SA_"+toString("",nSA_Count),10,exeSA(x_dInput,x_dOutput,x_nLength)
+    nSA_Count=nSA_Count+1
+    if nSA_Count>nMaxTask
+      nSA_Count=0
+    endIf
+  else
+    logMsg("libSignals/SA->can't create SA task")
+  endIf
+
+end]]></Code>
+  </Program>
+</Programs>

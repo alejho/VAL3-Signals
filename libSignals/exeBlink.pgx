@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="exeBlink">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_dDio" type="dio" xsi:type="element" />
+      <Parameter name="x_nInterval" type="num" xsi:type="element" />
+    </Parameters>
+    <Code><![CDATA[begin
+
+  while true
+
+    x_dDio=true
+    delay(x_nInterval)
+    x_dDio=false
+    delay(x_nInterval)
+
+  endWhile
+
+end]]></Code>
+  </Program>
+</Programs>

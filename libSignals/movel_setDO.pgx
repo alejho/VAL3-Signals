@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="movel_setDO" access="public">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_pPoint" type="point" xsi:type="element" />
+      <Parameter name="x_tTool" type="tool" xsi:type="element" />
+      <Parameter name="x_mMdesc" type="mdesc" xsi:type="element" />
+      <Parameter name="x_dDio" type="dio" xsi:type="element" use="reference" />
+    </Parameters>
+    <Locals>
+      <Local name="l_nDist" type="num" xsi:type="array" size="1" />
+      <Local name="l_nIndex" type="num" xsi:type="array" size="1" />
+      <Local name="l_bRes" type="bool" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+
+  //execute a movej with the usual arguments (x_pPoint, x_tTool, x_mMdesc) meanwhile
+  //when the distance between x_tTool and x_pPoint is lesser than x_nDistance the output x_dDio is set to true
+  
+  //the stack is busy
+  if bAdvMoves
+    l_bRes = watch(!bAdvMoves, nDeadLockTout)
+    if !l_bRes
+      //it seems stuck!
+      call advMovesEmpty(l_bRes)
+      //check the "stack" compliance
+      call checkAdvMoves()
+      if l_bRes
+        //but the stack is empty...someone changed it to true manually and saved the library?
+        bAdvMoves = false
+        libSave()
+        logMsg("libSignals/movel_setDO->deadlock fixed")
+      endIf
+    endIf
+  endIf
+  
+  setMutex(bAdvMoves)
+
+  if x_mMdesc.blend==off
+    l_nDist=nBlendOffToll
+  else
+    l_nDist=x_mMdesc.leave+nBlendOnToll
+  endIf
+  
+  //check the "stack" compliance
+  call checkAdvMoves()
+  
+  //get the first index available
+  l_nIndex=-1
+  while l_nIndex<0
+    call avaAdvMoveIndex(l_nIndex)
+    delay(0)
+  endWhile
+  
+  //get the first index available
+  l_nIndex=-1
+  while l_nIndex<0
+    call avaAdvMoveIndex(l_nIndex)
+    delay(0)
+  endWhile
+    
+  if taskStatus(sAdvMovePrefix+toString("",l_nIndex))==-1
+    call lockAdvMove(l_nIndex)
+    taskCreate sAdvMovePrefix+toString("",l_nIndex),10,exeMove_setDO(l_nIndex, movel(x_pPoint,x_tTool,x_mMdesc),x_pPoint,x_tTool,l_nDist,x_dDio) 
+    wait(taskStatus(sAdvMovePrefix+toString("",l_nIndex))==1)
+    //launch id watchdog 
+    call launchIdWD()
+  else
+    logMsg("libSignals/movel_setDO->error creating the control task")
+  endIf
+  
+  bAdvMoves = false
+
+
+end]]></Code>
+  </Program>
+</Programs>

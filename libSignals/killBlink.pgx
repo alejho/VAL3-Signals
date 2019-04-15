@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="killBlink" access="public">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_sDioName" type="string" xsi:type="element" />
+    </Parameters>
+    <Code><![CDATA[begin
+
+
+  //destroy the task that is making the dio blinking...
+  taskKill("blink_"+x_sDioName)
+  wait(taskStatus("blink_"+x_sDioName)==-1)
+
+
+end]]></Code>
+  </Program>
+</Programs>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="exeSA">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_dInput" type="dio" xsi:type="element" />
+      <Parameter name="x_dOutput" type="dio" xsi:type="element" />
+      <Parameter name="x_nLength" type="num" xsi:type="element" />
+    </Parameters>
+    <Code><![CDATA[begin
+
+  while true
+    x_dOutput=true
+    wait(x_dInput==false)
+    if (!watch(x_dInput==true,x_nLength))
+      x_dOutput=false
+    endIf
+    wait(x_dInput==true)
+    x_dOutput=true
+  endWhile
+end]]></Code>
+  </Program>
+</Programs>

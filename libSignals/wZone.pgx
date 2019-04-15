@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="wZone" access="public">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_tTool" type="tool" xsi:type="element" />
+      <Parameter name="x_pPoint" type="point" xsi:type="element" />
+      <Parameter name="x_fFrame" type="frame" xsi:type="element" />
+      <Parameter name="x_Dx" type="num" xsi:type="element" />
+      <Parameter name="x_Dy" type="num" xsi:type="element" />
+      <Parameter name="x_Dz" type="num" xsi:type="element" />
+      <Parameter name="x_dOut" type="dio" xsi:type="element" use="reference" />
+    </Parameters>
+    <Code><![CDATA[begin
+
+  //set x_dOut to false if x_tTool is inside a box defined as:
+
+  //x_pPoint.trsf.x + x_Dx/2 > here(x_tTool, x_fFrame).x > x_pPoint.trsf.x - x_Dx/2
+  //x_pPoint.trsf.y + x_Dy/2 > here(x_tTool, x_fFrame).y > x_pPoint.trsf.y - x_Dy/2
+  //x_pPoint.trsf.z + x_Dz/2 > here(x_tTool, x_fFrame).z > x_pPoint.trsf.z - x_Dz/2
+
+  if taskStatus("wZone_"+toString("",nWzoneCount))==-1
+    taskCreate "wZone_"+toString("",nWzoneCount),15,exeWzone(x_tTool,x_pPoint,x_fFrame,x_Dx,x_Dy,x_Dz,x_dOut)
+    nWzoneCount=nWzoneCount+1
+    if nWzoneCount>nMaxTask
+      nWzoneCount=0
+    endIf
+  else
+    logMsg("libSignals/wZone->can't create the task")
+  endIf
+
+
+end]]></Code>
+  </Program>
+</Programs>
